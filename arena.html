@@ -1,0 +1,1604 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sucursales y Horarios — arena</title>
+    
+    <!-- Fuentes Oficiales del Manual (Google Fonts) -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Lato:ital,wght@0,300;0,400;0,700;1,400&family=Oswald:wght@500;600;700&family=Raleway:wght@300;400;600;700;800&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            /* Paleta Oficial del Manual */
+            --arena-blue: #0088e3;
+            --arena-blue-dark: #002b99;
+            --arena-red: #ff3300;
+            --arena-yellow: #ffe600;
+            --arena-green: #6bb398;
+            --arena-sand-bg: #fbf9f5;
+            --arena-sand-card: #f4efe6;
+            --arena-dark: #1a1a1a;
+            --arena-gray: #666666;
+            --arena-border: rgba(0, 0, 0, 0.08);
+            --white: #ffffff;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: 'Lato', sans-serif;
+            background:
+                linear-gradient(rgba(247, 244, 239, 0.66), rgba(247, 244, 239, 0.72)),
+                url('https://i.postimg.cc/dVhRW5cR/Chat-GPT-Image-18-sept-2026-09-35-49.png') center center / cover no-repeat fixed;
+            color: var(--arena-dark);
+            line-height: 1.6;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* --- HEADER / NAVBAR MINIMALISTA --- */
+        header {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            z-index: 20;
+            background: transparent;
+            border-bottom: none;
+            padding: 18px 40px 0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+
+        .brand-logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            text-decoration: none;
+            position: relative;
+            z-index: 2;
+            height: 64px;
+        }
+
+        .brand-logo img {
+            width: auto;
+            height: 62px;
+            max-width: 260px;
+            object-fit: contain;
+            display: block;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.18));
+        }
+
+        .brand-logo span {
+            display: none;
+        }
+
+        nav {
+            opacity: 0.95;
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 700;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+            letter-spacing: 1.4px;
+            color: rgba(255, 255, 255, 0.96);
+            transition: color 0.2s ease;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        nav a:hover {
+            color: var(--arena-yellow);
+        }
+
+        /* --- HERO BANNER MINIMALISTA CON FONDO --- */
+        .hero {
+            position: relative;
+            min-height: 680px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 130px 40px 90px;
+            overflow: hidden;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            text-align: center;
+            background-color: #0ea7c5;
+        }
+
+        .hero::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background-image:
+                linear-gradient(90deg, rgba(7, 138, 163, 0.90) 0%, rgba(7, 138, 163, 0.74) 40%, rgba(10, 167, 197, 0.16) 75%, rgba(9, 85, 104, 0.04) 100%),
+                url('https://i.postimg.cc/3RmKrQM6/Mesa-de-trabajo-1-2x-100-%283%29.jpg');
+            background-size: cover;
+            background-position: right center;
+            background-repeat: no-repeat;
+            transform: scale(1.04);
+        }
+
+        .hero-container {
+            position: relative;
+            z-index: 1;
+            max-width: 980px;
+            margin: 0 auto;
+        }
+
+        .hero-tagline-script {
+            font-family: 'Caveat', cursive;
+            font-size: clamp(2.1rem, 3vw, 4.5rem);
+            color: var(--arena-yellow);
+            display: block;
+            margin-bottom: -8px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.45);
+        }
+
+        .hero-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(2.8rem, 5vw, 7rem);
+            color: var(--white);
+            text-transform: uppercase;
+            line-height: 0.96;
+            letter-spacing: 0.5px;
+            margin-bottom: 20px;
+            text-shadow: 0 3px 10px rgba(0, 0, 0, 0.55);
+        }
+
+        .hero-description {
+            max-width: 860px;
+            margin: 0 auto;
+            font-family: 'Raleway', sans-serif;
+            font-size: clamp(1rem, 1.3vw, 1.5rem);
+            color: rgba(255, 255, 255, 0.94);
+            font-weight: 400;
+            line-height: 1.6;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .hero-accent-line {
+            width: 96px;
+            height: 4px;
+            background-color: var(--arena-yellow);
+            margin: 28px auto 0;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.35);
+        }
+
+        /* --- CONTENEDOR PRINCIPAL --- */
+        .container {
+            max-width: 1150px;
+            margin: 0 auto;
+            padding: 68px 24px 32px;
+        }
+
+        .stores-section-shell {
+            position: relative;
+            padding: 30px 28px 12px;
+            border-radius: 0;
+            background:
+                linear-gradient(rgba(251, 249, 245, 0.70), rgba(251, 249, 245, 0.80)),
+                url('https://i.postimg.cc/dVhRW5cR/Chat-GPT-Image-18-sept-2026-09-35-49.png') center center / cover no-repeat;
+            box-shadow: inset 0 0 0 1px rgba(0,0,0,0.02);
+        }
+
+        /* --- ENCABEZADOS DE SECCIÓN --- */
+        .section-header {
+            margin-bottom: 36px;
+            border-left: 4px solid var(--arena-red);
+            padding-left: 18px;
+        }
+
+        .section-subtitle {
+            font-family: 'Raleway', sans-serif;
+            font-weight: 700;
+            font-size: 0.8rem;
+            color: var(--arena-blue);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            display: block;
+            margin-bottom: 4px;
+        }
+
+        .section-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.5rem;
+            color: var(--arena-red);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            line-height: 1.08;
+        }
+
+        .map-panel {
+            margin: 0 0 36px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(244,248,250,0.9));
+            border: 1px solid rgba(0, 136, 227, 0.12);
+            border-radius: 24px;
+            overflow: hidden;
+            box-shadow: 0 24px 50px rgba(13, 42, 56, 0.08);
+            position: relative;
+        }
+
+        .map-panel::before {
+            content: "";
+            position: absolute;
+            inset: 0;
+            background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0));
+            pointer-events: none;
+            z-index: 1;
+        }
+
+        #branch-map {
+            position: relative;
+            z-index: 0;
+            width: 100%;
+            height: 420px;
+            min-height: 320px;
+        }
+
+        /* --- GRID MINIMALISTA DE SUCURSALES SIN IMÁGENES --- */
+        .branches-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 28px;
+        }
+
+        .branch-card {
+            position: relative;
+            background: linear-gradient(180deg, rgba(255,255,255,0.96), rgba(248,245,240,0.9));
+            border-radius: 18px;
+            overflow: hidden;
+            box-shadow: 0 12px 26px rgba(21, 29, 36, 0.06);
+            border: 1px solid rgba(24, 55, 78, 0.07);
+            display: flex;
+            flex-direction: column;
+            transition: transform 0.25s ease, box-shadow 0.25s ease;
+        }
+
+        .branch-card::before {
+            content: "";
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 0;
+            height: 4px;
+            background: linear-gradient(90deg, var(--arena-red), var(--arena-yellow), var(--arena-blue));
+        }
+
+        .branch-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 18px 36px rgba(21, 29, 36, 0.09);
+        }
+
+        /* CABECERA GRÁFICA MINIMALISTA (REEMPLAZO DE IMAGEN) */
+        .branch-graphic-header {
+            background: linear-gradient(135deg, rgba(0,136,227,0.05), rgba(0,136,227,0.12));
+            border-bottom: 1px solid rgba(0, 136, 227, 0.10);
+            padding: 22px 24px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            position: relative;
+        }
+
+        .branch-number {
+            font-family: 'Oswald', sans-serif;
+            font-size: 2.1rem;
+            font-weight: 700;
+            color: rgba(0, 136, 227, 0.32);
+            line-height: 1;
+        }
+
+        .branch-meta {
+            text-align: right;
+        }
+
+        .branch-city-name {
+            font-family: 'Caveat', cursive;
+            font-size: 1.8rem;
+            color: var(--arena-blue);
+            font-weight: 700;
+            display: block;
+            line-height: 1;
+        }
+
+        .branch-type-tag {
+            font-family: 'Raleway', sans-serif;
+            font-size: 0.72rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--arena-gray);
+        }
+
+        .branch-body {
+            padding: 24px 24px 22px;
+            display: flex;
+            flex-direction: column;
+            flex-grow: 1;
+        }
+
+        .branch-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.7rem;
+            color: var(--arena-red);
+            text-transform: uppercase;
+            margin-bottom: 22px;
+            line-height: 1.2;
+            letter-spacing: 0.5px;
+        }
+
+        .info-row {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .info-row svg {
+            width: 20px;
+            height: 20px;
+            fill: var(--arena-blue);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .info-content .label {
+            font-family: 'Raleway', sans-serif;
+            font-weight: 700;
+            font-size: 0.75rem;
+            text-transform: uppercase;
+            color: var(--arena-gray);
+            letter-spacing: 1px;
+            display: block;
+            margin-bottom: 2px;
+        }
+
+        .info-content .value {
+            font-size: 0.95rem;
+            color: var(--arena-dark);
+            font-weight: 400;
+        }
+
+        .status-box {
+            display: inline-block;
+            align-self: flex-start;
+            padding: 6px 10px;
+            border-radius: 999px;
+            font-family: 'Raleway', sans-serif;
+            font-size: 0.7rem;
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: auto;
+            background: rgba(107, 179, 152, 0.12);
+            color: #2e7a5f;
+            border: 1px solid rgba(107, 179, 152, 0.18);
+        }
+
+        .btn-location {
+            display: block;
+            width: 100%;
+            text-align: center;
+            background: linear-gradient(135deg, var(--arena-blue), #0b75c8);
+            color: var(--white);
+            font-family: 'Oswald', sans-serif;
+            font-size: 0.96rem;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            padding: 13px 14px;
+            border-radius: 12px;
+            text-decoration: none;
+            margin-top: 22px;
+            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
+            box-shadow: 0 12px 20px rgba(0, 136, 227, 0.18);
+        }
+
+        .btn-location:hover {
+            filter: brightness(1.04);
+            transform: translateY(-1px);
+            box-shadow: 0 14px 24px rgba(0, 136, 227, 0.22);
+        }
+
+        /* --- BANNER PROMO "MIX & MATCH" MINIMALISTA --- */
+        .promo-section {
+            display: none;
+        }
+
+        /* --- ADMIN PANEL --- */
+        .admin-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(17, 20, 24, 0.62);
+            backdrop-filter: blur(6px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 999;
+            padding: 24px;
+        }
+
+        .admin-overlay.hidden {
+            display: none;
+        }
+
+        .access-card {
+            width: min(440px, 88vw);
+            background: #f3f3f1;
+            border: 2px solid rgba(204, 146, 23, 0.9);
+            border-radius: 18px;
+            box-shadow: 0 12px 28px rgba(0,0,0,0.14);
+            padding: 22px 22px 18px;
+            text-align: center;
+        }
+
+        .access-card.hidden {
+            display: none;
+        }
+
+        .access-icon {
+            width: 62px;
+            height: 62px;
+            margin: 0 auto 16px;
+            border-radius: 50%;
+            border: 2px solid rgba(0,0,0,0.8);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.7rem;
+            background: rgba(255,255,255,0.18);
+            color: #111;
+        }
+
+        .access-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(1.6rem, 2vw, 2.4rem);
+            letter-spacing: 0.04em;
+            text-transform: uppercase;
+            color: #111;
+            margin-bottom: 8px;
+            line-height: 1.1;
+        }
+
+        .access-subtitle {
+            font-family: 'Lato', sans-serif;
+            font-size: 1rem;
+            color: rgba(17,17,17,0.8);
+            margin-bottom: 18px;
+            line-height: 1.5;
+        }
+
+        .access-input {
+            width: 100%;
+            height: 48px;
+            border: 2px solid rgba(204, 146, 23, 0.9);
+            border-radius: 10px;
+            background: rgba(255,255,255,0.18);
+            padding: 0 14px;
+            font-size: 1rem;
+            color: #111;
+            outline: none;
+        }
+
+        .access-actions {
+            display: flex;
+            justify-content: space-between;
+            gap: 14px;
+            margin-top: 22px;
+        }
+
+        .access-actions button {
+            flex: 1;
+            height: 48px;
+            border: 0;
+            border-radius: 10px;
+            font-family: 'Oswald', sans-serif;
+            font-size: 1.04rem;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .cancel-btn {
+            background: rgba(125, 130, 135, 0.85);
+            color: #fff;
+        }
+
+        .enter-btn {
+            background: #111;
+            color: #fff;
+            box-shadow: 0 8px 18px rgba(0,0,0,0.18);
+        }
+
+        .admin-panel {
+            width: min(1100px, 95vw);
+            max-height: 90vh;
+            overflow: auto;
+            background: #fff;
+            border-radius: 24px;
+            box-shadow: 0 30px 80px rgba(0,0,0,0.25);
+            border: 1px solid rgba(0,0,0,0.06);
+            display: none;
+        }
+
+        .admin-panel.visible {
+            display: block;
+        }
+
+        .admin-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 16px;
+            padding: 22px 26px;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            background: linear-gradient(135deg, #f8f4ee, #eef5fa);
+        }
+
+        .admin-title {
+            font-family: 'Oswald', sans-serif;
+            font-size: clamp(1.7rem, 2.4vw, 2.5rem);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            color: var(--arena-red);
+        }
+
+        .admin-close {
+            border: 0;
+            background: rgba(0,0,0,0.04);
+            color: var(--arena-dark);
+            border-radius: 999px;
+            width: 40px;
+            height: 40px;
+            font-size: 1.4rem;
+            cursor: pointer;
+        }
+
+        .admin-content {
+            display: grid;
+            grid-template-columns: 1.1fr 1.4fr;
+            gap: 0;
+        }
+
+        .admin-side {
+            background: #f8fafb;
+            border-right: 1px solid rgba(0,0,0,0.06);
+            padding: 24px 20px;
+        }
+
+        .admin-side h3 {
+            font-size: 0.72rem;
+            font-family: 'Raleway', sans-serif;
+            text-transform: uppercase;
+            letter-spacing: 1.2px;
+            color: var(--arena-blue);
+            margin-bottom: 16px;
+        }
+
+        .branch-list {
+            display: grid;
+            gap: 12px;
+        }
+
+        .branch-list-item {
+            display: flex;
+            justify-content: space-between;
+            gap: 12px;
+            background: #fff;
+            border: 1px solid rgba(0,0,0,0.06);
+            border-radius: 12px;
+            padding: 12px 14px;
+            align-items: center;
+        }
+
+        .branch-list-item strong {
+            display: block;
+            font-size: 0.96rem;
+            color: var(--arena-dark);
+        }
+
+        .branch-list-item small {
+            display: block;
+            color: var(--arena-gray);
+            margin-top: 4px;
+        }
+
+        .branch-list-actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .mini-btn,
+        .primary-btn,
+        .secondary-btn,
+        .danger-btn {
+            border: 0;
+            border-radius: 10px;
+            font-family: 'Raleway', sans-serif;
+            font-weight: 700;
+            cursor: pointer;
+            transition: 0.2s ease;
+        }
+
+        .mini-btn {
+            padding: 8px 10px;
+            font-size: 0.72rem;
+            background: rgba(0,136,227,0.08);
+            color: var(--arena-blue);
+        }
+
+        .danger-btn {
+            padding: 8px 10px;
+            font-size: 0.72rem;
+            background: rgba(255,51,0,0.08);
+            color: var(--arena-red);
+        }
+
+        .primary-btn {
+            padding: 12px 18px;
+            background: linear-gradient(135deg, var(--arena-blue), #0d72c7);
+            color: #fff;
+            box-shadow: 0 12px 18px rgba(0,136,227,0.18);
+        }
+
+        .secondary-btn {
+            padding: 12px 18px;
+            background: rgba(0,0,0,0.04);
+            color: var(--arena-dark);
+        }
+
+        .admin-main {
+            padding: 24px 22px 26px;
+        }
+
+        .admin-login-box,
+        .admin-form-box {
+            display: grid;
+            gap: 20px;
+        }
+
+        .admin-login-box.hidden,
+        .admin-form-box.hidden {
+            display: none;
+        }
+
+        .field-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .field {
+            display: grid;
+            gap: 8px;
+        }
+
+        .field label {
+            font-family: 'Raleway', sans-serif;
+            font-weight: 700;
+            font-size: 0.72rem;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--arena-gray);
+        }
+
+        .field input,
+        .field textarea,
+        .field select {
+            width: 100%;
+            border: 1px solid rgba(0,0,0,0.08);
+            border-radius: 10px;
+            padding: 12px 14px;
+            font-size: 0.95rem;
+            background: #fff;
+            color: var(--arena-dark);
+        }
+
+        .field textarea {
+            min-height: 92px;
+            resize: vertical;
+        }
+
+        .schedule-block {
+            display: grid;
+            gap: 12px;
+            background: #f8fafb;
+            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 14px;
+            padding: 14px;
+        }
+
+        .schedule-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .schedule-row {
+            display: grid;
+            grid-template-columns: 1.2fr 0.9fr 0.9fr auto;
+            gap: 10px;
+            align-items: end;
+        }
+
+        .mini-map-box {
+            margin-top: 18px;
+            background: #f7fafb;
+            border: 1px solid rgba(0,0,0,0.05);
+            border-radius: 14px;
+            padding: 12px;
+        }
+
+        #adminMiniMap {
+            width: 100%;
+            height: 230px;
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        .form-actions {
+            display: flex;
+            justify-content: flex-end;
+            gap: 12px;
+            margin-top: 12px;
+        }
+
+        @media (max-width: 860px) {
+            .admin-content {
+                grid-template-columns: 1fr;
+            }
+
+            .admin-side {
+                border-right: 0;
+                border-bottom: 1px solid rgba(0,0,0,0.06);
+            }
+
+            .field-grid,
+            .schedule-row {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* --- FOOTER Y TIPS DEL MANUAL --- */
+        footer {
+            position: relative;
+            background:
+                linear-gradient(rgba(0, 0, 0, 0.34), rgba(0, 0, 0, 0.30)),
+                url('https://i.postimg.cc/9fW76bvx/Chat-GPT-Image-18-sept-2026-09-56-07.png') center/cover no-repeat;
+            border-top: 1px solid rgba(0,0,0,0.04);
+            padding: 30px 24px 26px;
+            margin-top: 90px;
+        }
+
+        .tips-box {
+            display: none;
+        }
+
+        .footer-brand {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding-top: 8px;
+        }
+
+        .footer-brand img {
+            width: auto;
+            max-width: 160px;
+            height: 50px;
+            object-fit: contain;
+            opacity: 0.9;
+        }
+
+        .copyright-text {
+            text-align: center;
+            font-family: 'Raleway', sans-serif;
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.88);
+            margin-top: 18px;
+        }
+
+        /* RESPONSIVO */
+        @media (max-width: 900px) {
+            header {
+                padding: 18px 20px 0;
+                gap: 12px;
+            }
+
+            nav ul {
+                gap: 16px;
+            }
+
+            nav a {
+                font-size: 0.72rem;
+                letter-spacing: 1px;
+            }
+
+            .container {
+                width: min(100%, calc(100% - 16px));
+                padding-top: 42px;
+            }
+
+            .stores-section-shell {
+                padding: 20px 14px 10px;
+            }
+
+            .section-header {
+                margin-bottom: 28px;
+                padding-left: 14px;
+            }
+
+            .section-title {
+                font-size: 2.1rem;
+            }
+
+            .map-panel {
+                margin-bottom: 24px;
+            }
+
+            #branch-map {
+                height: 300px;
+            }
+
+            .branches-grid {
+                grid-template-columns: 1fr;
+                gap: 18px;
+            }
+
+            .branch-card {
+                min-width: 0;
+            }
+
+            .promo-section {
+                padding: 26px 18px;
+                margin-top: 30px;
+            }
+
+            .promo-content h3 {
+                font-size: 1.9rem;
+            }
+
+            .price-tag-minimal {
+                width: 100%;
+                text-align: center;
+            }
+        }
+
+        @media (max-width: 560px) {
+            header {
+                padding-top: 12px;
+            }
+
+            .brand-logo {
+                height: 48px;
+            }
+
+            .brand-logo img {
+                height: 46px;
+            }
+
+            nav {
+                width: 100%;
+            }
+
+            nav ul {
+                justify-content: flex-end;
+                gap: 10px;
+                flex-wrap: wrap;
+            }
+
+            .hero {
+                min-height: 520px;
+                padding: 100px 18px 60px;
+            }
+
+            .hero-title {
+                font-size: 2.3rem;
+                line-height: 1.02;
+            }
+
+            .hero-description {
+                font-size: 0.96rem;
+            }
+
+            .section-subtitle {
+                font-size: 0.73rem;
+            }
+
+            .section-title {
+                font-size: 1.8rem;
+            }
+
+            .branch-body {
+                padding: 18px 16px 20px;
+            }
+
+            .branch-title {
+                font-size: 1.35rem;
+            }
+
+            .info-row {
+                gap: 10px;
+            }
+
+            .info-content .value {
+                font-size: 0.9rem;
+            }
+
+            .promo-content h3 {
+                font-size: 1.5rem;
+            }
+
+            .promo-content p {
+                font-size: 0.9rem;
+            }
+
+            .price-tag-minimal .amount {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- NAVBAR MINIMALISTA -->
+    <header>
+        <a href="#" class="brand-logo" aria-label="Arena logo">
+            <img src="https://i.postimg.cc/0ySx0qjD/Artboard-1-copy-13-2x.png" alt="Logo Arena" />
+        </a>
+
+        <nav aria-label="Menu principal" style="visibility: hidden; pointer-events: none;">
+            <ul>
+                <li>&nbsp;</li>
+                <li>&nbsp;</li>
+                <li>&nbsp;</li>
+            </ul>
+        </nav>
+    </header>
+
+    <!-- HERO EDITORIAL CLEAN (SIN STAMP CIRCULAR) -->
+    <section class="hero">
+        <div class="hero-container">
+            <span class="hero-tagline-script">Tu próximo traje de baño...</span>
+            <h1 class="hero-title">NO VIENE DE UNA FÁBRICA</h1>
+            <p class="hero-description">Moda sostenible, consciente y para todas sin gastar de más. Encontrá tu tienda más cercana y conocé nuestros horarios de atención.</p>
+            <div class="hero-accent-line"></div>
+        </div>
+    </section>
+
+    <!-- SECCIÓN SUCURSALES & HORARIOS -->
+    <main class="container" id="sucursales">
+        <div class="stores-section-shell">
+        <div class="section-header">
+            <span class="section-subtitle">Destinos, Sol y Ruta</span>
+            <h2 class="section-title">Nuestras Sucursales</h2>
+        </div>
+
+        <div class="map-panel">
+            <div id="branch-map"></div>
+        </div>
+
+        <div class="branches-grid" id="branchesGrid"></div>
+        </div>
+
+
+    </main>
+
+    <div id="adminOverlay" class="admin-overlay hidden" aria-hidden="true">
+        <div id="accessCard" class="access-card hidden">
+            <div class="access-icon">🔒</div>
+            <h2 class="access-title">ACCESO RESTRINGIDO</h2>
+            <p class="access-subtitle">Ingrese la contraseña de administrador.</p>
+            <input id="adminPassword" class="access-input" type="password" placeholder="Contraseña" />
+            <div class="access-actions">
+                <button type="button" class="cancel-btn" id="cancelAccessBtn">Cancelar</button>
+                <button type="button" class="enter-btn" id="loginBtn">Ingresar</button>
+            </div>
+        </div>
+
+        <div id="adminManagementPanel" class="admin-panel" aria-hidden="true">
+            <div class="admin-header">
+                <h2 class="admin-title">Panel de administración</h2>
+                <button type="button" class="admin-close" id="closeAdminPanel" aria-label="Cerrar">×</button>
+            </div>
+
+            <div class="admin-content">
+                <aside class="admin-side">
+                    <h3>Sucursales registradas</h3>
+                    <div class="branch-list" id="adminBranchList"></div>
+                    <div style="margin-top: 16px; display: flex; justify-content: flex-start;">
+                        <button type="button" class="primary-btn" id="newBranchBtn">Agregar sucursal</button>
+                    </div>
+                </aside>
+
+                <section class="admin-main">
+                    <div id="formBox" class="admin-form-box">
+                        <input type="hidden" id="branchId" />
+
+                        <div class="field-grid">
+                            <div class="field">
+                                <label for="branchName">Nombre</label>
+                                <input id="branchName" type="text" placeholder="Ej. Galerías Santo Domingo" />
+                            </div>
+                            <div class="field">
+                                <label for="branchCity">Ciudad</label>
+                                <input id="branchCity" type="text" placeholder="Ej. Managua" />
+                            </div>
+                        </div>
+
+                        <div class="field-grid">
+                            <div class="field">
+                                <label for="branchAddress">Dirección</label>
+                                <textarea id="branchAddress" placeholder="Escribe la dirección exacta"></textarea>
+                            </div>
+                            <div class="field">
+                                <label for="branchStatus">Estado</label>
+                                <select id="branchStatus">
+                                    <option value="Abierto Ahora">Abierto Ahora</option>
+                                    <option value="Próximamente">Próximamente</option>
+                                    <option value="Cerrado">Cerrado</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="field-grid">
+                            <div class="field">
+                                <label for="branchLat">Latitud</label>
+                                <input id="branchLat" type="number" step="any" placeholder="12.1234" />
+                            </div>
+                            <div class="field">
+                                <label for="branchLng">Longitud</label>
+                                <input id="branchLng" type="number" step="any" placeholder="-86.2470" />
+                            </div>
+                        </div>
+
+                        <div class="schedule-block">
+                            <div class="schedule-header">
+                                <strong style="font-family: 'Raleway', sans-serif; color: var(--arena-dark); text-transform: uppercase; letter-spacing: 1px; font-size: 0.75rem;">Horarios</strong>
+                                <button type="button" class="secondary-btn" id="addScheduleBtn">Agregar horario</button>
+                            </div>
+                            <div id="scheduleList"></div>
+                        </div>
+
+                        <div class="mini-map-box">
+                            <label style="display:block; margin-bottom: 10px; font-family: 'Raleway', sans-serif; font-weight: 700; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 1px; color: var(--arena-gray);">Mini mapa para ubicar sucursal</label>
+                            <div id="adminMiniMap"></div>
+                        </div>
+
+                        <div class="form-actions">
+                            <button type="button" class="secondary-btn" id="cancelBranchBtn">Cancelar</button>
+                            <button type="button" class="primary-btn" id="saveBranchBtn">Guardar sucursal</button>
+                        </div>
+                    </div>
+                </section>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBf6lATeECejIkEBntQyu2-jmYAy-xXggQ&callback=initMap"></script>
+    <script>
+        const ADMIN_PASSWORD = 'arena2026';
+
+        const DEFAULT_BRANCHES = [
+            {
+                id: 'branch-1',
+                name: 'Galerías Santo Domingo',
+                city: 'Managua',
+                address: 'Zona Deportiva, Módulo L-4. Frente a la plaza central.',
+                lat: 12.1232,
+                lng: -86.2470,
+                status: 'Abierto Ahora',
+                schedules: [
+                    { label: 'Lunes a jueves', open: '10:00', close: '20:00' },
+                    { label: 'Viernes a sábado', open: '10:00', close: '21:00' },
+                    { label: 'Domingo', open: '11:00', close: '18:00' }
+                ]
+            },
+            {
+                id: 'branch-2',
+                name: 'Metrocentro',
+                city: 'Managua',
+                address: 'Planta Baja, Módulo B-12. Cerca de la entrada principal.',
+                lat: 12.1184,
+                lng: -86.2784,
+                status: 'Abierto Ahora',
+                schedules: [
+                    { label: 'Lunes a sábado', open: '09:00', close: '19:30' },
+                    { label: 'Domingo', open: '10:00', close: '18:00' }
+                ]
+            },
+            {
+                id: 'branch-3',
+                name: 'Playa & Surf Shop',
+                city: 'San Juan del Sur',
+                address: 'Avenida del Malecón, contiguo a Restaurante El Timón.',
+                lat: 11.2523,
+                lng: -85.8713,
+                status: 'Abierto Ahora',
+                schedules: [
+                    { label: 'Lunes a domingo', open: '08:00', close: '19:00' }
+                ]
+            }
+        ];
+
+        let branches = [...DEFAULT_BRANCHES];
+        let adminMap = null;
+        let adminMarker = null;
+
+        const firebaseConfig = {
+            apiKey: 'AIzaSyCCy9LgyjnjWBwbyQcF_JPVeiYs5XsNCVo',
+            authDomain: 'arenanic-d9258.firebaseapp.com',
+            projectId: 'arenanic-d9258',
+            storageBucket: 'arenanic-d9258.firebasestorage.app',
+            messagingSenderId: '930042227494',
+            appId: '1:930042227494:web:4839cf4fe59f5b8187afe7',
+            measurementId: 'G-H2WCE780XF'
+        };
+
+        firebase.initializeApp(firebaseConfig);
+        const db = firebase.firestore();
+
+        const mapStyles = [
+            { elementType: 'geometry', stylers: [{ color: '#f5f7f8' }] },
+            { elementType: 'labels.text.fill', stylers: [{ color: '#58656f' }] },
+            { elementType: 'labels.text.stroke', stylers: [{ color: '#ffffff' }, { lightness: 100 }] },
+            { featureType: 'administrative', elementType: 'geometry', stylers: [{ color: '#dfe7eb' }] },
+            { featureType: 'administrative.land_parcel', elementType: 'labels.text.fill', stylers: [{ color: '#7a8791' }] },
+            { featureType: 'landscape', elementType: 'geometry', stylers: [{ color: '#edf3f5' }] },
+            { featureType: 'poi', stylers: [{ visibility: 'off' }] },
+            { featureType: 'poi.park', elementType: 'geometry', stylers: [{ color: '#dfeadf' }] },
+            { featureType: 'poi.park', elementType: 'labels.text.fill', stylers: [{ color: '#4f7b5a' }] },
+            { featureType: 'road', elementType: 'geometry', stylers: [{ color: '#dfe7ee' }] },
+            { featureType: 'road', elementType: 'geometry.stroke', stylers: [{ color: '#d1dbe3' }] },
+            { featureType: 'road.highway', elementType: 'geometry', stylers: [{ color: '#d7dfe7' }] },
+            { featureType: 'road.highway', elementType: 'geometry.stroke', stylers: [{ color: '#c2ced7' }] },
+            { featureType: 'transit', stylers: [{ visibility: 'off' }] },
+            { featureType: 'water', elementType: 'geometry', stylers: [{ color: '#cfe8f3' }] },
+            { featureType: 'water', elementType: 'labels.text.fill', stylers: [{ color: '#4b7da3' }] }
+        ];
+
+        function getSchedulesText(schedules = []) {
+            if (!schedules.length) return 'Horario no definido';
+            return schedules.map((item) => `${item.label}: ${item.open} - ${item.close}`).join(' • ');
+        }
+
+        function renderBranchCards() {
+            const grid = document.getElementById('branchesGrid');
+            if (!grid) return;
+
+            grid.innerHTML = branches.map((branch) => `
+                <article class="branch-card">
+                    <div class="branch-graphic-header">
+                        <span class="branch-number">${String(branches.indexOf(branch) + 1).padStart(2, '0')}</span>
+                        <div class="branch-meta">
+                            <span class="branch-city-name">${branch.city || 'Ciudad'}</span>
+                            <span class="branch-type-tag">${branch.status || 'Abierto'}</span>
+                        </div>
+                    </div>
+                    <div class="branch-body">
+                        <h3 class="branch-title">${branch.name}</h3>
+
+                        <div class="info-row">
+                            <svg viewBox="0 0 24 24"><path d="M12 2C8.13 2 5 5.13 5 9c0 5.25 7 13 7 13s7-7.75 7-13c0-3.87-3.13-7-7-7zm0 9.5c-1.38 0-2.5-1.12-2.5-2.5s1.12-2.5 2.5-2.5 2.5 1.12 2.5 2.5-1.12 2.5-2.5 2.5z"/></svg>
+                            <div class="info-content">
+                                <span class="label">Dirección</span>
+                                <span class="value">${branch.address || 'Dirección no definida'}</span>
+                            </div>
+                        </div>
+
+                        <div class="info-row">
+                            <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+                            <div class="info-content">
+                                <span class="label">Horarios de Atención</span>
+                                <span class="value">${getSchedulesText(branch.schedules)}</span>
+                            </div>
+                        </div>
+
+                        <div class="status-box">${branch.status || 'Abierto Ahora'}</div>
+                        <a href="#" class="btn-location" data-branch-id="${branch.id}">Ver Ubicación en Mapa</a>
+                    </div>
+                </article>
+            `).join('');
+
+            document.querySelectorAll('.btn-location').forEach((button) => {
+                button.addEventListener('click', (event) => {
+                    event.preventDefault();
+                    const branch = branches.find((item) => item.id === button.dataset.branchId);
+                    if (!branch || !window.publicMap) return;
+                    window.publicMap.panTo({ lat: branch.lat, lng: branch.lng });
+                    window.publicMap.setZoom(14);
+                });
+            });
+        }
+
+        function initMap() {
+            const map = new google.maps.Map(document.getElementById('branch-map'), {
+                center: { lat: 12.1165, lng: -86.2362 },
+                zoom: 11,
+                mapTypeId: google.maps.MapTypeId.ROADMAP,
+                mapTypeControl: true,
+                streetViewControl: false,
+                fullscreenControl: true,
+                zoomControl: true,
+                gestureHandling: 'greedy',
+                styles: mapStyles,
+                zoomControlOptions: { position: google.maps.ControlPosition.TOP_RIGHT },
+                mapTypeControlOptions: { position: google.maps.ControlPosition.TOP_LEFT }
+            });
+
+            window.publicMap = map;
+            renderMarkers();
+            renderBranchCards();
+        }
+
+        function renderMarkers() {
+            if (!window.publicMap) return;
+
+            if (window.publicMarkers) {
+                window.publicMarkers.forEach((marker) => marker.setMap(null));
+            }
+
+            window.publicMarkers = branches.map((branch, index) => {
+                const marker = new google.maps.Marker({
+                    position: { lat: branch.lat, lng: branch.lng },
+                    map: window.publicMap,
+                    title: branch.name,
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 11,
+                        fillColor: index % 2 === 0 ? '#ff3300' : '#0088e3',
+                        fillOpacity: 1,
+                        strokeColor: '#ffffff',
+                        strokeWeight: 3
+                    },
+                    label: {
+                        text: String(index + 1),
+                        color: '#ffffff',
+                        fontWeight: '700',
+                        fontSize: '12px'
+                    }
+                });
+
+                const infoWindow = new google.maps.InfoWindow({
+                    content: `
+                        <div style="font-family: Arial, sans-serif; padding: 8px 10px; min-width: 180px;">
+                            <strong style="display:block; margin-bottom:6px; color:#002b99;">${branch.name}</strong>
+                            <span style="color:#666; font-size:12px;">${branch.city}</span>
+                        </div>
+                    `
+                });
+
+                marker.addListener('click', () => {
+                    infoWindow.open({ map: window.publicMap, anchor: marker });
+                });
+
+                return marker;
+            });
+        }
+
+        function openAdminPanel() {
+            const overlay = document.getElementById('adminOverlay');
+            const accessCard = document.getElementById('accessCard');
+            const adminPanel = document.getElementById('adminManagementPanel');
+            if (!overlay) return;
+
+            overlay.classList.remove('hidden');
+            overlay.setAttribute('aria-hidden', 'false');
+            accessCard.classList.remove('hidden');
+            adminPanel.classList.remove('visible');
+            adminPanel.setAttribute('aria-hidden', 'true');
+            document.getElementById('adminPassword').value = '';
+            document.getElementById('adminPassword').focus();
+        }
+
+        function closeAdminPanel() {
+            const overlay = document.getElementById('adminOverlay');
+            const accessCard = document.getElementById('accessCard');
+            const adminPanel = document.getElementById('adminManagementPanel');
+            if (!overlay) return;
+            overlay.classList.add('hidden');
+            overlay.setAttribute('aria-hidden', 'true');
+            accessCard.classList.remove('hidden');
+            adminPanel.classList.remove('visible');
+            adminPanel.setAttribute('aria-hidden', 'true');
+        }
+
+        function loginAdmin() {
+            const password = document.getElementById('adminPassword').value.trim();
+            const accessCard = document.getElementById('accessCard');
+            const adminPanel = document.getElementById('adminManagementPanel');
+
+            if (password === ADMIN_PASSWORD) {
+                accessCard.classList.add('hidden');
+                adminPanel.classList.add('visible');
+                adminPanel.setAttribute('aria-hidden', 'false');
+                loadBranchesFromFirestore();
+                renderAdminList();
+                resetBranchForm();
+                initializeAdminMap();
+                return;
+            }
+
+            alert('Contraseña incorrecta.');
+        }
+
+        function resetBranchForm() {
+            document.getElementById('branchId').value = '';
+            document.getElementById('branchName').value = '';
+            document.getElementById('branchCity').value = '';
+            document.getElementById('branchAddress').value = '';
+            document.getElementById('branchStatus').value = 'Abierto Ahora';
+            document.getElementById('branchLat').value = '12.1165';
+            document.getElementById('branchLng').value = '-86.2362';
+            document.getElementById('scheduleList').innerHTML = '';
+            addScheduleRow();
+            if (adminMap && adminMarker) {
+                adminMarker.setPosition({ lat: 12.1165, lng: -86.2362 });
+                adminMap.setCenter({ lat: 12.1165, lng: -86.2362 });
+            }
+        }
+
+        function addScheduleRow(data = {}) {
+            const scheduleList = document.getElementById('scheduleList');
+            const row = document.createElement('div');
+            row.className = 'schedule-row';
+            row.innerHTML = `
+                <div class="field">
+                    <label>Etiqueta</label>
+                    <input type="text" class="schedule-label" value="${data.label || 'Lunes a jueves'}" />
+                </div>
+                <div class="field">
+                    <label>Apertura</label>
+                    <input type="time" class="schedule-open" value="${data.open || '10:00'}" />
+                </div>
+                <div class="field">
+                    <label>Cierre</label>
+                    <input type="time" class="schedule-close" value="${data.close || '20:00'}" />
+                </div>
+                <button type="button" class="danger-btn remove-schedule">Eliminar</button>
+            `;
+
+            row.querySelector('.remove-schedule').addEventListener('click', () => {
+                if (scheduleList.children.length > 1) {
+                    row.remove();
+                }
+            });
+
+            scheduleList.appendChild(row);
+        }
+
+        function initializeAdminMap() {
+            const mapEl = document.getElementById('adminMiniMap');
+            if (!mapEl) return;
+
+            if (!adminMap) {
+                adminMap = new google.maps.Map(mapEl, {
+                    center: { lat: 12.1165, lng: -86.2362 },
+                    zoom: 10,
+                    mapTypeControl: false,
+                    streetViewControl: false,
+                    fullscreenControl: false,
+                    styles: mapStyles,
+                    zoomControl: true
+                });
+
+                adminMarker = new google.maps.Marker({
+                    map: adminMap,
+                    draggable: true,
+                    position: { lat: 12.1165, lng: -86.2362 },
+                    icon: {
+                        path: google.maps.SymbolPath.CIRCLE,
+                        scale: 11,
+                        fillColor: '#ff3300',
+                        fillOpacity: 1,
+                        strokeColor: '#ffffff',
+                        strokeWeight: 3
+                    }
+                });
+
+                adminMap.addListener('click', (event) => {
+                    const pos = event.latLng;
+                    adminMarker.setPosition(pos);
+                    document.getElementById('branchLat').value = pos.lat().toFixed(6);
+                    document.getElementById('branchLng').value = pos.lng().toFixed(6);
+                });
+
+                adminMarker.addListener('dragend', (event) => {
+                    const pos = event.latLng;
+                    document.getElementById('branchLat').value = pos.lat().toFixed(6);
+                    document.getElementById('branchLng').value = pos.lng().toFixed(6);
+                });
+            }
+        }
+
+        function populateBranchForm(branch) {
+            document.getElementById('branchId').value = branch.id || '';
+            document.getElementById('branchName').value = branch.name || '';
+            document.getElementById('branchCity').value = branch.city || '';
+            document.getElementById('branchAddress').value = branch.address || '';
+            document.getElementById('branchStatus').value = branch.status || 'Abierto Ahora';
+            document.getElementById('branchLat').value = branch.lat || '12.1165';
+            document.getElementById('branchLng').value = branch.lng || '-86.2362';
+
+            const scheduleList = document.getElementById('scheduleList');
+            scheduleList.innerHTML = '';
+            const schedules = Array.isArray(branch.schedules) && branch.schedules.length ? branch.schedules : [{ label: 'Lunes a domingo', open: '10:00', close: '20:00' }];
+            schedules.forEach((item) => addScheduleRow(item));
+
+            if (adminMap && adminMarker) {
+                const center = { lat: Number(branch.lat || 12.1165), lng: Number(branch.lng || -86.2362) };
+                adminMarker.setPosition(center);
+                adminMap.setCenter(center);
+                adminMap.setZoom(13);
+            }
+        }
+
+        function renderAdminList() {
+            const list = document.getElementById('adminBranchList');
+            if (!list) return;
+
+            list.innerHTML = branches.map((branch) => `
+                <div class="branch-list-item">
+                    <div>
+                        <strong>${branch.name}</strong>
+                        <small>${branch.city}</small>
+                    </div>
+                    <div class="branch-list-actions">
+                        <button type="button" class="mini-btn edit-branch" data-id="${branch.id}">Editar</button>
+                        <button type="button" class="danger-btn delete-branch" data-id="${branch.id}">Borrar</button>
+                    </div>
+                </div>
+            `).join('');
+
+            list.querySelectorAll('.edit-branch').forEach((button) => {
+                button.addEventListener('click', () => {
+                    const branch = branches.find((item) => item.id === button.dataset.id);
+                    if (branch) populateBranchForm(branch);
+                });
+            });
+
+            list.querySelectorAll('.delete-branch').forEach((button) => {
+                button.addEventListener('click', async () => {
+                    const id = button.dataset.id;
+                    const confirmDelete = window.confirm('¿Quieres borrar esta sucursal?');
+                    if (!confirmDelete) return;
+
+                    const branchIndex = branches.findIndex((item) => item.id === id);
+                    if (branchIndex >= 0) {
+                        branches.splice(branchIndex, 1);
+                    }
+
+                    try {
+                        await db.collection('branches').doc(id).delete();
+                    } catch (error) {
+                        console.warn('No se pudo borrar en Firestore:', error);
+                    }
+
+                    renderAdminList();
+                    renderBranchCards();
+                    renderMarkers();
+                    resetBranchForm();
+                });
+            });
+        }
+
+        async function loadBranchesFromFirestore() {
+            try {
+                const snapshot = await db.collection('branches').get();
+                if (!snapshot.empty) {
+                    branches = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+                } else {
+                    branches = [...DEFAULT_BRANCHES];
+                }
+            } catch (error) {
+                console.warn('Firestore no disponible; usando datos locales:', error);
+                branches = [...DEFAULT_BRANCHES];
+            }
+
+            renderBranchCards();
+            renderMarkers();
+            renderAdminList();
+        }
+
+        async function saveBranch() {
+            const id = document.getElementById('branchId').value || `branch-${Date.now()}`;
+            const branch = {
+                id,
+                name: document.getElementById('branchName').value.trim(),
+                city: document.getElementById('branchCity').value.trim(),
+                address: document.getElementById('branchAddress').value.trim(),
+                status: document.getElementById('branchStatus').value,
+                lat: Number(document.getElementById('branchLat').value),
+                lng: Number(document.getElementById('branchLng').value),
+                schedules: []
+            };
+
+            document.querySelectorAll('.schedule-row').forEach((row) => {
+                const label = row.querySelector('.schedule-label').value.trim();
+                const open = row.querySelector('.schedule-open').value;
+                const close = row.querySelector('.schedule-close').value;
+
+                if (!label || !open || !close) return;
+                branch.schedules.push({ label, open, close });
+            });
+
+            if (!branch.name || !branch.city || !branch.address) {
+                alert('Completa nombre, ciudad y dirección antes de guardar.');
+                return;
+            }
+
+            const existingIndex = branches.findIndex((item) => item.id === id);
+            if (existingIndex >= 0) {
+                branches[existingIndex] = branch;
+            } else {
+                branches.push(branch);
+            }
+
+            try {
+                await db.collection('branches').doc(id).set(branch, { merge: true });
+                renderBranchCards();
+                renderMarkers();
+                renderAdminList();
+                resetBranchForm();
+                alert('Sucursal guardada correctamente.');
+            } catch (error) {
+                console.error('Error guardando sucursal:', error);
+                alert('No se pudo guardar en Firestore. Revisa la configuración de Firebase.');
+            }
+        }
+
+        document.querySelector('.brand-logo').addEventListener('click', (event) => {
+            event.preventDefault();
+            openAdminPanel();
+        });
+
+        document.getElementById('closeAdminPanel').addEventListener('click', closeAdminPanel);
+        document.getElementById('cancelAccessBtn').addEventListener('click', closeAdminPanel);
+        document.getElementById('loginBtn').addEventListener('click', loginAdmin);
+        document.getElementById('newBranchBtn').addEventListener('click', () => {
+            resetBranchForm();
+        });
+        document.getElementById('addScheduleBtn').addEventListener('click', () => addScheduleRow());
+        document.getElementById('cancelBranchBtn').addEventListener('click', () => {
+            resetBranchForm();
+        });
+        document.getElementById('saveBranchBtn').addEventListener('click', saveBranch);
+
+        document.getElementById('adminPassword').addEventListener('keydown', (event) => {
+            if (event.key === 'Enter') {
+                loginAdmin();
+            }
+        });
+
+        loadBranchesFromFirestore();
+        resetBranchForm();
+    </script>
+
+    <!-- FOOTER Y SECCIÓN DE CONSEJOS -->
+    <footer>
+        <div class="footer-brand">
+            <img src="https://i.postimg.cc/0ySx0qjD/Artboard-1-copy-13-2x.png" alt="Logo Arena" />
+        </div>
+
+        <p class="copyright-text">&copy; 2026 arena — Moda Sostenible. Todos los derechos reservados.</p>
+    </footer>
+
+</body>
+</html>
