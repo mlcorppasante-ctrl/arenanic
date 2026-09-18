@@ -1141,6 +1141,26 @@
         let branches = [...DEFAULT_BRANCHES];
         let adminMap = null;
         let adminMarker = null;
+        const STORAGE_KEY = 'arena_branches_local';
+
+        function getLocalBranches() {
+            try {
+                const saved = localStorage.getItem(STORAGE_KEY);
+                return saved ? JSON.parse(saved) : null;
+            } catch (error) {
+                return null;
+            }
+        }
+
+        function saveLocalBranches(data) {
+            try {
+                localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+                return true;
+            } catch (error) {
+                console.warn('No se pudo guardar en localStorage:', error);
+                return false;
+            }
+        }
 
         const firebaseConfig = {
             apiKey: 'AIzaSyCCy9LgyjnjWBwbyQcF_JPVeiYs5XsNCVo',
@@ -1500,16 +1520,22 @@
         }
 
         async function loadBranchesFromFirestore() {
+            const localData = getLocalBranches();
+
             try {
                 const snapshot = await db.collection('branches').get();
                 if (!snapshot.empty) {
                     branches = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
+                    saveLocalBranches(branches);
+                } else if (localData && localData.length) {
+                    branches = localData;
                 } else {
                     branches = [...DEFAULT_BRANCHES];
+                    saveLocalBranches(branches);
                 }
             } catch (error) {
                 console.warn('Firestore no disponible; usando datos locales:', error);
-                branches = [...DEFAULT_BRANCHES];
+                branches = localData && localData.length ? localData : [...DEFAULT_BRANCHES];
             }
 
             renderBranchCards();
@@ -1553,6 +1579,7 @@
 
             try {
                 await db.collection('branches').doc(id).set(branch, { merge: true });
+                saveLocalBranches(branches);
                 renderBranchCards();
                 renderMarkers();
                 renderAdminList();
@@ -1560,7 +1587,12 @@
                 alert('Sucursal guardada correctamente.');
             } catch (error) {
                 console.error('Error guardando sucursal:', error);
-                alert('No se pudo guardar en Firestore. Revisa la configuración de Firebase.');
+                saveLocalBranches(branches);
+                renderBranchCards();
+                renderMarkers();
+                renderAdminList();
+                resetBranchForm();
+                alert('Se guardó localmente porque Firestore tiene reglas bloqueadas. Ajusta las reglas para persistencia remota.');
             }
         }
 
