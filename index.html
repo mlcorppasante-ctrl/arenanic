@@ -209,9 +209,10 @@
             padding: 30px 28px 12px;
             border-radius: 0;
             background:
-                linear-gradient(rgba(251, 249, 245, 0.70), rgba(251, 249, 245, 0.80)),
+                linear-gradient(180deg, rgba(251, 249, 245, 0.80), rgba(247, 243, 233, 0.86)),
                 url('https://i.postimg.cc/dVhRW5cR/Chat-GPT-Image-18-sept-2026-09-35-49.png') center center / cover no-repeat;
             box-shadow: inset 0 0 0 1px rgba(0,0,0,0.02);
+            border: 1px solid rgba(0, 43, 153, 0.04);
         }
 
         /* --- ENCABEZADOS DE SECCIÓN --- */
@@ -243,11 +244,11 @@
 
         .map-panel {
             margin: 0 0 36px;
-            background: linear-gradient(180deg, rgba(255,255,255,0.82), rgba(244,248,250,0.9));
-            border: 1px solid rgba(0, 136, 227, 0.12);
-            border-radius: 24px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.88), rgba(245,248,250,0.96));
+            border: 1px solid rgba(0, 43, 153, 0.08);
+            border-radius: 18px;
             overflow: hidden;
-            box-shadow: 0 24px 50px rgba(13, 42, 56, 0.08);
+            box-shadow: 0 18px 30px rgba(18, 34, 54, 0.06);
             position: relative;
         }
 
@@ -255,7 +256,7 @@
             content: "";
             position: absolute;
             inset: 0;
-            background: linear-gradient(135deg, rgba(255,255,255,0.18), rgba(255,255,255,0));
+            background: linear-gradient(135deg, rgba(255,255,255,0.20), rgba(255,255,255,0));
             pointer-events: none;
             z-index: 1;
         }
@@ -264,8 +265,8 @@
             position: relative;
             z-index: 0;
             width: 100%;
-            height: 420px;
-            min-height: 320px;
+            height: 380px;
+            min-height: 300px;
         }
 
         /* --- GRID MINIMALISTA DE SUCURSALES SIN IMÁGENES --- */
@@ -277,14 +278,14 @@
 
         .branch-card {
             position: relative;
-            background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(246,249,252,0.96));
-            border-radius: 18px;
+            background: linear-gradient(180deg, rgba(255,255,255,0.98), rgba(248,249,251,0.96));
+            border-radius: 16px;
             overflow: hidden;
-            box-shadow: 0 14px 30px rgba(10, 30, 62, 0.08);
-            border: 1px solid rgba(7, 45, 95, 0.08);
+            box-shadow: 0 12px 22px rgba(15, 28, 40, 0.05);
+            border: 1px solid rgba(12, 36, 62, 0.06);
             display: flex;
             flex-direction: column;
-            transition: transform 0.25s ease, box-shadow 0.25s ease;
+            transition: transform 0.22s ease, box-shadow 0.22s ease;
         }
 
         .branch-card::before {
@@ -294,19 +295,20 @@
             right: 0;
             top: 0;
             height: 4px;
-            background: linear-gradient(90deg, var(--arena-blue-dark), var(--arena-yellow), var(--arena-blue));
+            background: linear-gradient(90deg, var(--arena-yellow), #f1cf4d, #f7e8a8);
+            box-shadow: 0 2px 8px rgba(246, 214, 72, 0.28);
         }
 
         .branch-card:hover {
-            transform: translateY(-4px);
-            box-shadow: 0 20px 38px rgba(10, 30, 62, 0.12);
+            transform: translateY(-3px);
+            box-shadow: 0 18px 26px rgba(15, 28, 40, 0.08);
         }
 
         /* CABECERA GRÁFICA MINIMALISTA (REEMPLAZO DE IMAGEN) */
         .branch-graphic-header {
-            background: linear-gradient(135deg, rgba(0,136,227,0.05), rgba(0,136,227,0.12));
-            border-bottom: 1px solid rgba(0, 136, 227, 0.10);
-            padding: 22px 24px;
+            background: linear-gradient(135deg, rgba(255,255,255,0.97), rgba(240,246,251,0.82));
+            border-bottom: 1px solid rgba(0, 43, 153, 0.06);
+            padding: 18px 20px;
             display: flex;
             align-items: center;
             justify-content: space-between;
@@ -317,8 +319,9 @@
             font-family: 'Oswald', sans-serif;
             font-size: 2.1rem;
             font-weight: 700;
-            color: rgba(0, 136, 227, 0.32);
+            color: rgba(246, 214, 72, 0.8);
             line-height: 1;
+            text-shadow: 0 0 0.5px rgba(0,0,0,0.06);
         }
 
         .branch-meta {
@@ -340,7 +343,10 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1.2px;
-            color: var(--arena-gray);
+            color: var(--arena-blue-dark);
+            background: rgba(246, 214, 72, 0.14);
+            padding: 4px 8px;
+            border-radius: 999px;
         }
 
         .branch-body {
@@ -351,19 +357,21 @@
         }
 
         .branch-title {
-            font-family: var(--font-branch);
-            font-size: 1.8rem;
+            font-family: 'Bernard', 'Oswald', sans-serif;
+            font-size: 2.1rem;
             color: var(--arena-blue-dark);
             text-transform: uppercase;
-            margin-bottom: 22px;
-            line-height: 1.02;
-            letter-spacing: 0.03em;
+            margin-bottom: 18px;
+            line-height: 0.92;
+            letter-spacing: 0.04em;
+            font-weight: 400;
         }
 
         .info-row {
             display: flex;
             gap: 14px;
             margin-bottom: 18px;
+            align-items: flex-start;
         }
 
         .info-row svg {
@@ -371,64 +379,67 @@
             height: 20px;
             fill: var(--arena-blue);
             flex-shrink: 0;
-            margin-top: 2px;
+            margin-top: 3px;
         }
 
         .info-content .label {
             font-family: 'Raleway', sans-serif;
             font-weight: 700;
-            font-size: 0.75rem;
+            font-size: 0.72rem;
             text-transform: uppercase;
             color: var(--arena-gray);
             letter-spacing: 1px;
             display: block;
-            margin-bottom: 2px;
+            margin-bottom: 4px;
         }
 
         .info-content .value {
-            font-size: 0.95rem;
+            font-size: 0.94rem;
             color: var(--arena-dark);
             font-weight: 400;
+            line-height: 1.5;
+            letter-spacing: 0.01em;
         }
 
         .status-box {
             display: inline-block;
             align-self: flex-start;
-            padding: 6px 10px;
+            padding: 7px 11px;
             border-radius: 999px;
             font-family: 'Raleway', sans-serif;
-            font-size: 0.7rem;
+            font-size: 0.68rem;
             font-weight: 800;
             text-transform: uppercase;
             letter-spacing: 1px;
             margin-top: auto;
-            background: rgba(0, 136, 227, 0.08);
+            background: rgba(246, 214, 72, 0.18);
             color: var(--arena-blue-dark);
-            border: 1px solid rgba(0, 136, 227, 0.18);
+            border: 1px solid rgba(246, 214, 72, 0.3);
         }
 
         .btn-location {
             display: block;
             width: 100%;
             text-align: center;
-            background: linear-gradient(135deg, var(--arena-blue-dark), var(--arena-blue));
-            color: var(--white);
+            background: linear-gradient(180deg, rgba(246,214,72,0.18), rgba(255,248,209,0.95));
+            color: var(--arena-blue-dark);
             font-family: 'Oswald', sans-serif;
-            font-size: 0.96rem;
+            font-size: 0.9rem;
             text-transform: uppercase;
             letter-spacing: 1.2px;
-            padding: 13px 14px;
+            padding: 12px 14px;
             border-radius: 12px;
             text-decoration: none;
-            margin-top: 22px;
-            transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
-            box-shadow: 0 12px 20px rgba(0, 136, 227, 0.18);
+            margin-top: 18px;
+            border: 1px solid rgba(246,214,72,0.35);
+            transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+            box-shadow: 0 8px 14px rgba(10, 30, 62, 0.04);
         }
 
         .btn-location:hover {
-            filter: brightness(1.04);
             transform: translateY(-1px);
-            box-shadow: 0 14px 24px rgba(0, 136, 227, 0.22);
+            box-shadow: 0 10px 16px rgba(10, 30, 62, 0.06);
+            border-color: rgba(0, 43, 153, 0.12);
         }
 
         /* --- BANNER PROMO "MIX & MATCH" MINIMALISTA --- */
@@ -1294,24 +1305,24 @@
                     title: branch.name,
                     icon: {
                         path: google.maps.SymbolPath.CIRCLE,
-                        scale: 11,
-                        fillColor: index % 2 === 0 ? '#ff3300' : '#0088e3',
+                        scale: 10,
+                        fillColor: index % 2 === 0 ? '#f6d648' : '#0088e3',
                         fillOpacity: 1,
                         strokeColor: '#ffffff',
-                        strokeWeight: 3
+                        strokeWeight: 2.5
                     },
                     label: {
                         text: String(index + 1),
-                        color: '#ffffff',
+                        color: '#0b1b2a',
                         fontWeight: '700',
-                        fontSize: '12px'
+                        fontSize: '11px'
                     }
                 });
 
                 const infoWindow = new google.maps.InfoWindow({
                     content: `
-                        <div style="font-family: Arial, sans-serif; padding: 8px 10px; min-width: 180px;">
-                            <strong style="display:block; margin-bottom:6px; color:#002b99;">${branch.name}</strong>
+                        <div style="font-family: 'Raleway', Arial, sans-serif; padding: 10px 12px; min-width: 180px; border-radius: 10px; background: rgba(255,255,255,0.98); box-shadow: 0 8px 18px rgba(0,0,0,0.08); border: 1px solid rgba(0,43,153,0.08);">
+                            <strong style="display:block; margin-bottom:6px; color:#002b99; font-size: 13px; letter-spacing: 0.02em;">${branch.name}</strong>
                             <span style="color:#666; font-size:12px;">${branch.city}</span>
                         </div>
                     `
