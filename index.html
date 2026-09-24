@@ -1529,6 +1529,7 @@
             });
         }
 
+        // AQUÍ ESTÁ LA FUNCIÓN CON LA CORRECCIÓN EXACTA APLICADA:
         async function loadBranchesFromFirestore() {
             const localData = getLocalBranches();
 
@@ -1537,15 +1538,23 @@
                 if (!snapshot.empty) {
                     branches = snapshot.docs.map((doc) => ({ id: doc.id, ...doc.data() }));
                     saveLocalBranches(branches);
-                } else if (localData && localData.length) {
+                } else if (localData !== null) { // Cambiado: ahora respeta si la lista está vacía intencionalmente
                     branches = localData;
                 } else {
                     branches = [...DEFAULT_BRANCHES];
                     saveLocalBranches(branches);
+                    // NUEVO: Subir sucursales por defecto a Firebase la primera vez
+                    branches.forEach(async (b) => {
+                        try {
+                            await db.collection('branches').doc(b.id).set(b);
+                        } catch (e) {
+                            console.warn("No se pudo guardar la sucursal por defecto en Firebase", e);
+                        }
+                    });
                 }
             } catch (error) {
                 console.warn('Firestore no disponible; usando datos locales:', error);
-                branches = localData && localData.length ? localData : [...DEFAULT_BRANCHES];
+                branches = localData !== null ? localData : [...DEFAULT_BRANCHES]; // Cambiado también aquí
             }
 
             renderBranchCards();
