@@ -11,6 +11,15 @@
     <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@600;700&family=Lato:ital,wght@0,300;0,400;0,700;1,400&family=Oswald:wght@500;600;700&family=Raleway:wght@300;400;600;700;800&display=swap" rel="stylesheet">
 
     <style>
+        @font-face {
+            font-family: 'Bernard';
+            src: url('https://raw.githubusercontent.com/tu-usuario/tu-repo/main/assets/fonts/Bernard-Regular.woff2') format('woff2'),
+                 url('https://raw.githubusercontent.com/tu-usuario/tu-repo/main/assets/fonts/Bernard-Regular.woff') format('woff');
+            font-weight: 400;
+            font-style: normal;
+            font-display: swap;
+        }
+
         :root {
             /* Paleta Oficial del Manual */
             --arena-blue: #0088e3;
@@ -24,6 +33,7 @@
             --arena-gray: #666666;
             --arena-border: rgba(0, 0, 0, 0.08);
             --white: #ffffff;
+            --font-display: 'Bernard', 'Oswald', 'Arial Black', sans-serif;
         }
 
         * {
@@ -151,7 +161,7 @@
         }
 
         .hero-title {
-            font-family: 'Oswald', sans-serif;
+            font-family: var(--font-display);
             font-size: clamp(2.8rem, 5vw, 7rem);
             color: var(--white);
             text-transform: uppercase;
@@ -216,7 +226,7 @@
         }
 
         .section-title {
-            font-family: 'Oswald', sans-serif;
+            font-family: var(--font-display);
             font-size: 2.5rem;
             color: var(--arena-red);
             text-transform: uppercase;
@@ -863,20 +873,6 @@
             .branch-card {
                 min-width: 0;
             }
-
-            .promo-section {
-                padding: 26px 18px;
-                margin-top: 30px;
-            }
-
-            .promo-content h3 {
-                font-size: 1.9rem;
-            }
-
-            .price-tag-minimal {
-                width: 100%;
-                text-align: center;
-            }
         }
 
         @media (max-width: 560px) {
@@ -939,18 +935,6 @@
             .info-content .value {
                 font-size: 0.9rem;
             }
-
-            .promo-content h3 {
-                font-size: 1.5rem;
-            }
-
-            .promo-content p {
-                font-size: 0.9rem;
-            }
-
-            .price-tag-minimal .amount {
-                font-size: 1.8rem;
-            }
         }
     </style>
 </head>
@@ -995,8 +979,6 @@
 
         <div class="branches-grid" id="branchesGrid"></div>
         </div>
-
-
     </main>
 
     <div id="adminOverlay" class="admin-overlay hidden" aria-hidden="true">
@@ -1090,9 +1072,12 @@
         </div>
     </div>
 
+    <!-- Scripts de Firebase Compat (Firestore + Auth) -->
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-app-compat.js"></script>
     <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.12.2/firebase-auth-compat.js"></script>
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBf6lATeECejIkEBntQyu2-jmYAy-xXggQ&callback=initMap"></script>
+    
     <script>
         const ADMIN_PASSWORD = 'arena2026';
 
@@ -1172,8 +1157,15 @@
             measurementId: 'G-H2WCE780XF'
         };
 
+        // Inicializar Firebase, Auth y Firestore
         firebase.initializeApp(firebaseConfig);
         const db = firebase.firestore();
+        const auth = firebase.auth();
+
+        // Autenticar anónimamente para cumplir con la regla: allow write if request.auth != null;
+        auth.signInAnonymously()
+            .then(() => console.log("Conectado a Firebase de forma segura."))
+            .catch((error) => console.error("Error en autenticación anónima:", error));
 
         const mapStyles = [
             { elementType: 'geometry', stylers: [{ color: '#f5f7f8' }] },
@@ -1494,6 +1486,7 @@
                 });
             });
 
+            // LOGICA CORREGIDA PARA BORRAR
             list.querySelectorAll('.delete-branch').forEach((button) => {
                 button.addEventListener('click', async () => {
                     const id = button.dataset.id;
@@ -1505,12 +1498,17 @@
                         branches.splice(branchIndex, 1);
                     }
 
+                    // 1. Guardar de inmediato en local para que el borrado perdure si se recarga
+                    saveLocalBranches(branches);
+
+                    // 2. Borrar de la nube de Firebase
                     try {
                         await db.collection('branches').doc(id).delete();
                     } catch (error) {
-                        console.warn('No se pudo borrar en Firestore:', error);
+                        console.warn('No se pudo borrar en Firestore. (Asegúrate de estar conectado a Internet).', error);
                     }
 
+                    // 3. Volver a pintar todo el sistema visual
                     renderAdminList();
                     renderBranchCards();
                     renderMarkers();
@@ -1592,10 +1590,11 @@
                 renderMarkers();
                 renderAdminList();
                 resetBranchForm();
-                alert('Se guardó localmente porque Firestore tiene reglas bloqueadas. Ajusta las reglas para persistencia remota.');
+                alert('Se guardó localmente. (La conexión a Firestore puede estar bloqueada o sin internet)');
             }
         }
 
+        // Event Listeners principales
         document.querySelector('.brand-logo').addEventListener('click', (event) => {
             event.preventDefault();
             openAdminPanel();
@@ -1604,13 +1603,17 @@
         document.getElementById('closeAdminPanel').addEventListener('click', closeAdminPanel);
         document.getElementById('cancelAccessBtn').addEventListener('click', closeAdminPanel);
         document.getElementById('loginBtn').addEventListener('click', loginAdmin);
+        
         document.getElementById('newBranchBtn').addEventListener('click', () => {
             resetBranchForm();
         });
+        
         document.getElementById('addScheduleBtn').addEventListener('click', () => addScheduleRow());
+        
         document.getElementById('cancelBranchBtn').addEventListener('click', () => {
             resetBranchForm();
         });
+        
         document.getElementById('saveBranchBtn').addEventListener('click', saveBranch);
 
         document.getElementById('adminPassword').addEventListener('keydown', (event) => {
@@ -1619,6 +1622,7 @@
             }
         });
 
+        // Inicialización de datos
         loadBranchesFromFirestore();
         resetBranchForm();
     </script>
