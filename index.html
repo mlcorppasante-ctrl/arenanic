@@ -53,12 +53,13 @@
             font-family: 'Lato', sans-serif;
             background:
                 linear-gradient(180deg, rgba(11, 108, 173, 0.52), rgba(7, 49, 90, 0.24)),
-                url('https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1800&q=80') center center / cover no-repeat fixed;
+                url('https://images.unsplash.com/photo-1500375592092-40eb2168fd21?auto=format&fit=crop&w=1400&q=75') center center / cover no-repeat;
             color: var(--arena-dark);
             line-height: 1.6;
             -webkit-font-smoothing: antialiased;
             position: relative;
             min-height: 100vh;
+            background-attachment: scroll;
         }
 
         body::before {
@@ -164,6 +165,7 @@
             background:
                 linear-gradient(90deg, rgba(4, 95, 165, 0.72) 0%, rgba(11, 35, 85, 0.62) 33%, rgba(8, 33, 83, 0.38) 68%, rgba(6, 18, 42, 0.24) 100%),
                 url('https://i.postimg.cc/fycyZJfp/Gemini-Generated-Image-gq2fz2gq2fz2gq2f-(1).png') center center / cover no-repeat;
+            background-attachment: scroll;
         }
 
         .hero-container {
@@ -871,7 +873,7 @@
             position: relative;
             background:
                 linear-gradient(rgba(8, 49, 76, 0.42), rgba(8, 49, 76, 0.56)),
-                url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1600&q=80') center/cover no-repeat;
+                url('https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=1200&q=70') center/cover no-repeat;
             border-top: 1px solid rgba(0,0,0,0.04);
             padding: 30px 24px 26px;
             margin-top: 90px;
@@ -1256,15 +1258,18 @@
             measurementId: 'G-H2WCE780XF'
         };
 
-        // Inicializar Firebase, Auth y Firestore
-        firebase.initializeApp(firebaseConfig);
-        const db = firebase.firestore();
-        const auth = firebase.auth();
+        // Se inicializa Firebase solo cuando realmente se entra al panel de administración.
+        let db = null;
+        let auth = null;
 
-        // Autenticar anónimamente para cumplir con la regla: allow write if request.auth != null;
-        auth.signInAnonymously()
-            .then(() => console.log("Conectado a Firebase de forma segura."))
-            .catch((error) => console.error("Error en autenticación anónima:", error));
+        function ensureFirebase() {
+            if (!db || !auth) {
+                firebase.initializeApp(firebaseConfig);
+                db = firebase.firestore();
+                auth = firebase.auth();
+            }
+            return { db, auth };
+        }
 
         const mapStyles = [
             { elementType: 'geometry', stylers: [{ color: '#f5f7f8' }] },
@@ -1437,13 +1442,30 @@
             const adminPanel = document.getElementById('adminManagementPanel');
 
             if (password === ADMIN_PASSWORD) {
-                accessCard.classList.add('hidden');
-                adminPanel.classList.add('visible');
-                adminPanel.setAttribute('aria-hidden', 'false');
-                loadBranchesFromFirestore();
-                renderAdminList();
-                resetBranchForm();
-                initializeAdminMap();
+                const firebaseState = ensureFirebase();
+                auth = firebaseState.auth;
+                db = firebaseState.db;
+
+                auth.signInAnonymously()
+                    .then(() => {
+                        accessCard.classList.add('hidden');
+                        adminPanel.classList.add('visible');
+                        adminPanel.setAttribute('aria-hidden', 'false');
+                        loadBranchesFromFirestore();
+                        renderAdminList();
+                        resetBranchForm();
+                        initializeAdminMap();
+                    })
+                    .catch((error) => {
+                        console.error('Error en autenticación anónima:', error);
+                        accessCard.classList.add('hidden');
+                        adminPanel.classList.add('visible');
+                        adminPanel.setAttribute('aria-hidden', 'false');
+                        loadBranchesFromFirestore();
+                        renderAdminList();
+                        resetBranchForm();
+                        initializeAdminMap();
+                    });
                 return;
             }
 
@@ -1619,6 +1641,14 @@
         // AQUÍ ESTÁ LA NUEVA LÓGICA TOTALMENTE A PRUEBA DE "FANTASMAS"
         async function loadBranchesFromFirestore() {
             const localData = getLocalBranches();
+
+            if (!db) {
+                branches = localData !== null ? localData : [...DEFAULT_BRANCHES];
+                renderBranchCards();
+                renderMarkers();
+                renderAdminList();
+                return;
+            }
 
             try {
                 const snapshot = await db.collection('branches').get();
