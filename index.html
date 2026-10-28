@@ -1734,21 +1734,12 @@
             }
         });
 
-        // Carga las sucursales compartidas en todos los dispositivos.
+        // La lectura pública de Firestore no requiere autenticación.
         const firebaseState = ensureFirebase();
         db = firebaseState.db;
         auth = firebaseState.auth;
         resetBranchForm();
-        auth.signInAnonymously()
-            .then(() => loadBranchesFromFirestore())
-            .catch((error) => {
-                console.warn('No se pudo iniciar sesión con Firebase:', error);
-                branches = [];
-                branchesLoadMessage = 'No se pudieron cargar las sucursales. Verifica la conexión y los permisos.';
-                renderBranchCards();
-                renderMarkers();
-                renderAdminList();
-            });
+        loadBranchesFromFirestore();
     </script>
 
     <!-- FOOTER Y SECCIÓN DE CONSEJOS -->
