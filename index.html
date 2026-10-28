@@ -451,6 +451,7 @@
             font-weight: 400;
             line-height: 1.5;
             letter-spacing: 0.01em;
+            white-space: pre-line;
         }
 
         .status-box {
@@ -1292,7 +1293,7 @@
 
         function getSchedulesText(schedules = []) {
             if (!schedules.length) return 'Horario no definido';
-            return schedules.map((item) => `${item.label}: ${item.open} - ${item.close}`).join(' • ');
+            return schedules.map((item) => `${item.label}: ${item.open} - ${item.close}`).join('\n');
         }
 
         function renderBranchCards() {
