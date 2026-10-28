@@ -322,6 +322,13 @@
             isolation: isolate;
         }
 
+        .branch-empty {
+            grid-column: 1 / -1;
+            padding: 28px;
+            text-align: center;
+            color: var(--arena-gray);
+        }
+
         .branch-card::before {
             content: "";
             position: absolute;
@@ -1183,49 +1190,10 @@
     <script>
         const ADMIN_PASSWORD = 'arena2026';
 
-        const DEFAULT_BRANCHES = [
-            {
-                id: 'branch-1',
-                name: 'Galerías Santo Domingo',
-                city: 'Managua',
-                address: 'Zona Deportiva, Módulo L-4. Frente a la plaza central.',
-                lat: 12.1232,
-                lng: -86.2470,
-                status: 'Abierto Ahora',
-                schedules: [
-                    { label: 'Lunes a jueves', open: '10:00', close: '20:00' },
-                    { label: 'Viernes a sábado', open: '10:00', close: '21:00' },
-                    { label: 'Domingo', open: '11:00', close: '18:00' }
-                ]
-            },
-            {
-                id: 'branch-2',
-                name: 'Metrocentro',
-                city: 'Managua',
-                address: 'Planta Baja, Módulo B-12. Cerca de la entrada principal.',
-                lat: 12.1184,
-                lng: -86.2784,
-                status: 'Abierto Ahora',
-                schedules: [
-                    { label: 'Lunes a sábado', open: '09:00', close: '19:30' },
-                    { label: 'Domingo', open: '10:00', close: '18:00' }
-                ]
-            },
-            {
-                id: 'branch-3',
-                name: 'Playa & Surf Shop',
-                city: 'San Juan del Sur',
-                address: 'Avenida del Malecón, contiguo a Restaurante El Timón.',
-                lat: 11.2523,
-                lng: -85.8713,
-                status: 'Abierto Ahora',
-                schedules: [
-                    { label: 'Lunes a domingo', open: '08:00', close: '19:00' }
-                ]
-            }
-        ];
-
-        let branches = [...DEFAULT_BRANCHES];
+        const RETIRED_BRANCH_NAMES = new Set(['galeria', 'galerias', 'galeria santo domingo', 'galerias santo domingo', 'metrocentro']);
+        const normalizeBranchName = (name) => name.normalize('NFD').replace(/[\u0300-\u036f]/g, '').trim().toLowerCase();
+        let branches = [];
+        let branchesLoadMessage = 'Cargando sucursales...';
         let adminMap = null;
         let adminMarker = null;
         const STORAGE_KEY = 'arena_branches_local';
@@ -1299,6 +1267,10 @@
         function renderBranchCards() {
             const grid = document.getElementById('branchesGrid');
             if (!grid) return;
+            if (!branches.length) {
+                grid.innerHTML = `<p class="branch-empty">${branchesLoadMessage}</p>`;
+                return;
+            }
 
             grid.innerHTML = branches.map((branch) => `
                 <article class="branch-card">
@@ -1650,57 +1622,30 @@
 
         // AQUÍ ESTÁ LA NUEVA LÓGICA TOTALMENTE A PRUEBA DE "FANTASMAS"
         async function loadBranchesFromFirestore() {
-            const localData = getLocalBranches();
-
             if (!db) {
-                branches = localData !== null ? localData : [...DEFAULT_BRANCHES];
-                renderBranchCards();
-                renderMarkers();
-                renderAdminList();
-                return;
-            }
+                branches = [];
+                branchesLoadMessage = 'No se pudo conectar con la base de datos.';
+            } else {
+                try {
+                    const snapshot = await db.collection('branches').get({ source: 'server' });
+                    const loadedBranches = [];
 
-            try {
-                const snapshot = await db.collection('branches').get();
-                let hasConfig = false;
-                let loadedBranches = [];
+                    snapshot.forEach((doc) => {
+                        if (doc.id === '_system_config_') return;
+                        const branch = { id: doc.id, ...doc.data() };
+                        if (!RETIRED_BRANCH_NAMES.has(normalizeBranchName(branch.name || ''))) {
+                            loadedBranches.push(branch);
+                        }
+                    });
 
-                // 1. Revisamos absolutamente todo lo que hay en Firebase
-                snapshot.forEach((doc) => {
-                    if (doc.id === '_system_config_') {
-                        hasConfig = true; // Encontramos el "sello" de que ya está inicializada
-                    } else {
-                        loadedBranches.push({ id: doc.id, ...doc.data() });
-                    }
-                });
-
-                // 2. Si NO hay sello y NO hay sucursales, es la primera vez absoluta.
-                if (!hasConfig && loadedBranches.length === 0) {
-                    // Marcamos la base de datos poniendo el "sello"
-                    await db.collection('branches').doc('_system_config_').set({ initialized: true });
-                    
-                    // Subimos las sucursales por defecto a Firebase de verdad (así dejarán de ser fantasmas)
-                    for (const b of DEFAULT_BRANCHES) {
-                        await db.collection('branches').doc(b.id).set(b);
-                    }
-                    branches = [...DEFAULT_BRANCHES];
-                } 
-                // 3. Si la base de datos ya fue inicializada...
-                else {
-                    // (Opcional por sanidad) Si tenían datos de antes pero sin sello, se lo ponemos para el futuro.
-                    if (!hasConfig && loadedBranches.length > 0) {
-                        await db.collection('branches').doc('_system_config_').set({ initialized: true });
-                    }
-                    // Respetamos lo que haya cargado Firebase (incluso si está vacío porque borraste todo).
                     branches = loadedBranches;
+                    branchesLoadMessage = branches.length ? '' : 'No hay sucursales registradas.';
+                    saveLocalBranches(branches);
+                } catch (error) {
+                    console.warn('Firestore no disponible:', error);
+                    branches = [];
+                    branchesLoadMessage = 'No se pudieron cargar las sucursales. Verifica la conexión y los permisos.';
                 }
-
-                saveLocalBranches(branches);
-                
-            } catch (error) {
-                console.warn('Firestore no disponible; usando datos locales:', error);
-                // Si falla el internet, se usa la memoria.
-                branches = localData !== null ? localData : [...DEFAULT_BRANCHES];
             }
 
             renderBranchCards();
@@ -1797,9 +1742,9 @@
         auth.signInAnonymously()
             .then(() => loadBranchesFromFirestore())
             .catch((error) => {
-                console.warn('Firebase no disponible; usando datos locales:', error);
-                const localData = getLocalBranches();
-                branches = localData !== null ? localData : [...DEFAULT_BRANCHES];
+                console.warn('No se pudo iniciar sesión con Firebase:', error);
+                branches = [];
+                branchesLoadMessage = 'No se pudieron cargar las sucursales. Verifica la conexión y los permisos.';
                 renderBranchCards();
                 renderMarkers();
                 renderAdminList();
